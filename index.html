@@ -154,7 +154,7 @@
     transition:transform .4s cubic-bezier(.165, .84, .44, 1),box-shadow .4s cubic-bezier(.165, .84, .44, 1), border-color .4s ease;
     position: relative; overflow: hidden;}
   .card::before {
-    content: ''; position: absolute; inset: 0; background: linear-gradient(250deg, rgba(255,255,255,0.04), transparent); opacity: 0; transition: opacity 0.4s ease;
+    content: ''; position: absolute; inset: 0; background: linear-gradient(250deg, rgba(255,255,255,0.04), transparent); opacity: 0; transition: opacity 0.4s ease; pointer-events: none;
   }
   .card:hover::before { opacity: 1; }
 
