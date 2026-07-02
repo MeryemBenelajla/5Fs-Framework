@@ -105,7 +105,26 @@
   .nav-links a:hover{color:var(--ink)}
   .nav-cta{font-family:var(--mono);font-size:12px;color:var(--bg)!important;background:linear-gradient(100deg,var(--c4),var(--c5));padding:9px 16px;border-radius:100px;transition:transform .2s cubic-bezier(.175, .885, .32, 1.275),box-shadow .2s ease;font-weight:700}
   .nav-cta:hover{transform:scale(1.04) translateY(-1px);box-shadow:0 8px 22px rgba(255,196,90,.28)}
-  @media(max-width:720px){.nav-links a:not(.nav-cta){display:none}}
+
+  .nav-toggle{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;cursor:pointer;padding:8px;margin-left:auto}
+  .nav-toggle span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;transition:transform .25s ease, opacity .25s ease}
+  .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav-toggle.open span:nth-child(2){opacity:0}
+  .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+  @media(max-width:720px){
+    .nav-toggle{display:flex}
+    .nav-links{
+      margin-left:0;position:absolute;top:100%;left:0;right:0;
+      background:linear-gradient(180deg,var(--bg-2),var(--bg));
+      flex-direction:column;align-items:stretch;gap:0;
+      max-height:0;overflow:hidden;transition:max-height .35s ease;
+      border-bottom:1px solid var(--faint);
+    }
+    .nav-links.open{max-height:420px}
+    .nav-links a:not(.nav-cta){display:block!important;padding:16px 28px;border-top:1px solid var(--faint);font-size:13px}
+    .nav-links a.nav-cta{margin:16px 28px;text-align:center}
+  }
 
   /* Hero area styling */
   .hero{padding:90px 0 76px}
@@ -274,6 +293,12 @@
     .band-actions{justify-content:center}
     .foot-meta{text-align:left}
   }
+  @media(max-width:560px){
+    section{padding:56px 0}
+    .compass-panel{padding:24px}
+    .stage-item{padding:12px;gap:12px}
+    .stage-num{width:28px;height:28px;font-size:12px}
+  }
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
   :focus-visible{outline:2px solid var(--c5);outline-offset:3px;border-radius:6px}
 </style>
@@ -284,7 +309,10 @@
 <nav>
   <div class="nav-in">
     <span class="brand"><b>5Fs</b> Framework</span>
-    <div class="nav-links">
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
       <a href="#journey">The Story</a>
       <a href="#framework">The 5 Dimensions</a>
       <a href="#approach">How It Works</a>
@@ -713,6 +741,23 @@
 <script>
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:0.12});
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  if (navToggle && navLinks) {
+    navToggle.addEventListener('click', function(){
+      var isOpen = navLinks.classList.toggle('open');
+      navToggle.classList.toggle('open', isOpen);
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    navLinks.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){
+        navLinks.classList.remove('open');
+        navToggle.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
 </script>
 </body>
 </html>
